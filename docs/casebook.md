@@ -2,6 +2,8 @@
 
 ## Case 1 — The payer paid $8,400. Are we owed $800?
 
+[Try the interactive investigation](investigate-the-800.html) before reading the worked answers. Download the HTML file and open it in a browser.
+
 Start with the synthetic claim and remittance. The pricing worklist predicts $9,200 and the payer paid $8,400. Before contacting the payer, retrieve the effective contract terms, accepted claim facts, remittance adjustments, and payment history. Reconcile the payer-paid amount to the same revision and account for reversals or later transactions.
 
 | Variant | Evidence found | Calculation | Next action |
