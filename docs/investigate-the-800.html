@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Investigate the $800 | RCM Casebook</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eff4f2;color:#172e2a;font:16px/1.6 system-ui,sans-serif}main{max-width:1040px;margin:auto;padding:clamp(20px,5vw,64px)}h1{font-size:clamp(2.5rem,7vw,5rem);line-height:1;margin:.2em 0;letter-spacing:-.05em}h2{margin:0 0 .65em;font-size:1.3rem}p{margin:.5em 0 1em}.label{color:#376459;font-weight:700}.numbers,.grid{display:grid;gap:14px}.numbers{grid-template-columns:repeat(3,1fr);margin:24px 0}.numbers div,section{background:#fff;border:1px solid #cbdcd5;border-radius:14px;padding:18px}.numbers strong{display:block;font-size:clamp(1.3rem,4vw,2rem)}.grid{grid-template-columns:1fr 1fr;margin-top:16px;align-items:start}label{display:block;margin-bottom:6px}select,button{font:inherit;padding:8px 12px;border:1px solid #52796f;border-radius:7px;background:white;color:inherit}button{background:#174c3e;color:white;cursor:pointer}summary{cursor:pointer;font-weight:650}details{border-top:1px solid #d7e5df;padding:9px 0}details p{margin:8px 0 4px}fieldset{border:0;margin:0;padding:0}legend{font-weight:700;margin-bottom:8px}input{margin-right:7px}#feedback:not(:empty){background:#e5f4ed;padding:12px;border-radius:7px;margin-top:12px}footer{margin-top:22px;color:#376459}@media(max-width:620px){.grid{grid-template-columns:1fr}.numbers div{padding:10px}}:focus-visible{outline:3px solid #a54025;outline-offset:3px}
+</style>
+<main>
+<p class="label">RCM casebook · Synthetic training lab</p>
+<h1>Investigate the $800</h1>
+<p>The contract worklist expected $9,200. The remittance shows $8,400. Open the evidence, then decide what the hospital should do.</p>
+<div class="numbers"><div>Worklist estimate<strong>$9,200</strong></div><div>Reported payment<strong>$8,400</strong></div><div>Apparent difference<strong>$800</strong></div></div>
+<label for="case">Case file</label><select id="case"></select>
+<div class="grid">
+<section aria-labelledby="evidence-title"><h2 id="evidence-title">Evidence file</h2><div id="evidence"></div></section>
+<section aria-labelledby="action-title"><h2 id="action-title">Your decision</h2>
+<form id="decision"><fieldset><legend>What should the analyst do next?</legend>
+<label><input type="radio" name="action" value="recovery" required>Pursue contract recovery</label>
+<label><input type="radio" name="action" value="pricing">Correct the pricing model</label>
+<label><input type="radio" name="action" value="adjustment">Reconcile a documented adjustment</label>
+<label><input type="radio" name="action" value="review">Request or reconcile missing evidence</label>
+</fieldset><button type="submit">Check my decision</button></form>
+<div id="feedback" role="status" aria-live="polite"></div>
+</section></div>
+<footer>The worklist estimate is a starting point. Compare expected payer liability with verified payer payment on the same claim revision.</footer>
+</main>
+<script>
+const scenarios = [
+  {id:"u01", contract:"January 2026 rate schedule: $9,200. Applies to the February encounter. No special payment exception.", remit:"Payer paid $8,400. No patient share is recorded.", posting:"A single $8,400 payment is posted to the accepted revision. No reversal is present.", action:"recovery", math:"$9,200 − $8,400 = $800 shortfall.", reason:"The controlling rate and verified payment support a shortfall. Attach the clause, claim revision, and remittance, then verify the recovery deadline."},
+  {id:"u02", contract:"The original rate was $9,200. An amendment effective February 1 reduces the rate to $8,400.", remit:"Payer paid $8,400. No patient share is recorded.", posting:"A single $8,400 payment is posted to the accepted revision.", action:"pricing", math:"$8,400 − $8,400 = $0.", reason:"The amendment applies to the February encounter. Correct the date-effective pricing rule and reprice affected accounts."},
+  {id:"u03", contract:"The applicable allowed rate is $9,200. Payer liability excludes documented patient responsibility.", remit:"Payer paid $8,400 and assigned $800 to patient responsibility.", posting:"A single $8,400 payment is posted to the accepted revision.", action:"adjustment", math:"$9,200 − $800 patient share − $8,400 payer payment = $0.", reason:"The payer amount reconciles to the documented allocation. Verify applicable benefit and billing rules before any patient contact."},
+  {id:"u04", contract:"The case rate is $9,200. Clause 4 reduces payer liability by $800 for the documented transfer.", remit:"Payer paid $8,400. No patient share is recorded.", posting:"A single $8,400 payment is posted to the accepted revision.", action:"adjustment", math:"$9,200 − $800 contract exception − $8,400 payer payment = $0.", reason:"Verify the transfer documentation and the clause. Reconcile the difference as a contractual adjustment."},
+  {id:"u05", contract:"The worklist shows $9,200. The governing amendment for the February encounter is missing.", remit:"Payer paid $8,400. No patient share is recorded.", posting:"A single $8,400 payment is posted to the accepted revision.", action:"review", math:"Expected payer liability is unverified.", reason:"Obtain the controlling amendment and verify its effective date before deciding whether the variance is recoverable."},
+  {id:"u06", contract:"The effective rate is $9,200 with no documented adjustment.", remit:"One remittance reports $8,400. A second reports $9,200 for the same revision. The relationship between them is unresolved.", posting:"The worklist shows $8,400. The posting history lacks a confirmed link between the two remittances.", action:"review", math:"Actual payer payment is unresolved.", reason:"Resolve the payment sequence using trace IDs, reversals, and posting records before pursuing recovery."}
+];
+const get = id => document.getElementById(id);
+const picker = get("case");
+const form = get("decision");
+scenarios.forEach((item, index) => picker.add(new Option("Case " + (index + 1), item.id)));
+const current = () => scenarios.find(item => item.id === picker.value);
+function render() {
+  form.reset();
+  get("feedback").textContent = "";
+  const evidence = get("evidence");
+  evidence.replaceChildren();
+  const item = current();
+  for (const [heading, body] of [
+    ["Claim and encounter", "Hospital facility claim. Date of service February 12, 2026. Accepted revision 1." + (item.id === "u04" ? " The discharge record documents a transfer." : "")],
+    ["Contract and amendments", item.contract],
+    ["Remittance", item.remit],
+    ["Payment posting history", item.posting]
+  ]) {
+    const card = document.createElement("details");
+    const title = document.createElement("summary");
+    const text = document.createElement("p");
+    title.textContent = heading;
+    text.textContent = body;
+    card.append(title, text);
+    evidence.append(card);
+  }
+}
+picker.addEventListener("change", render);
+form.addEventListener("change", () => { get("feedback").textContent = ""; });
+form.addEventListener("submit", event => {
+  event.preventDefault();
+  const item = current();
+  const answer = new FormData(form).get("action");
+  get("feedback").textContent = (answer === item.action ? "That’s the best next action. " : "Revisit the evidence. ") + item.math + " " + item.reason;
+});
+render();
+</script>
+</html>
