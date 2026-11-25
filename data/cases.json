@@ -1,0 +1,130 @@
+[
+  {
+    "id": "u01",
+    "worklist_rate": 920000,
+    "rate": 920000,
+    "patient_share": 0,
+    "exception": 0,
+    "payments": [
+      840000
+    ],
+    "available_evidence": [
+      "rate",
+      "paid"
+    ],
+    "gold": {
+      "verdict": "shortfall",
+      "evidence": [
+        "rate",
+        "paid"
+      ]
+    }
+  },
+  {
+    "id": "u02",
+    "worklist_rate": 920000,
+    "rate": 840000,
+    "patient_share": 0,
+    "exception": 0,
+    "payments": [
+      840000
+    ],
+    "available_evidence": [
+      "rate",
+      "paid"
+    ],
+    "gold": {
+      "verdict": "matched",
+      "evidence": [
+        "rate",
+        "paid"
+      ]
+    }
+  },
+  {
+    "id": "u03",
+    "worklist_rate": 920000,
+    "rate": 920000,
+    "patient_share": 80000,
+    "exception": 0,
+    "payments": [
+      840000
+    ],
+    "available_evidence": [
+      "rate",
+      "patient_share",
+      "paid"
+    ],
+    "gold": {
+      "verdict": "matched",
+      "evidence": [
+        "rate",
+        "patient_share",
+        "paid"
+      ]
+    }
+  },
+  {
+    "id": "u04",
+    "worklist_rate": 920000,
+    "rate": 920000,
+    "patient_share": 0,
+    "exception": 80000,
+    "payments": [
+      840000
+    ],
+    "available_evidence": [
+      "rate",
+      "exception",
+      "paid"
+    ],
+    "gold": {
+      "verdict": "matched",
+      "evidence": [
+        "rate",
+        "exception",
+        "paid"
+      ]
+    }
+  },
+  {
+    "id": "u05",
+    "worklist_rate": 920000,
+    "rate": null,
+    "patient_share": 0,
+    "exception": 0,
+    "payments": [
+      840000
+    ],
+    "available_evidence": [
+      "missing_rate"
+    ],
+    "gold": {
+      "verdict": "review",
+      "evidence": [
+        "missing_rate"
+      ]
+    }
+  },
+  {
+    "id": "u06",
+    "worklist_rate": 920000,
+    "rate": 920000,
+    "patient_share": 0,
+    "exception": 0,
+    "payments": [
+      840000,
+      920000
+    ],
+    "available_evidence": [
+      "conflicting_payment"
+    ],
+    "gold": {
+      "verdict": "review",
+      "evidence": [
+        "conflicting_payment"
+      ]
+    }
+  }
+]
+
