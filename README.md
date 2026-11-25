@@ -14,6 +14,8 @@ A practical learning resource for hospital billing, finance, product, and engine
 
 The companion [claims platform](https://github.com/sakti1977/claims-platform) demonstrates submission, acknowledgment, rule rollback, and lost-receipt recovery with synthetic claims.
 
+Try [Investigate the $800](docs/investigate-the-800.html). Download the HTML file and open it in a browser to inspect six evidence files and check your decisions.
+
 ## Run the examples
 
 From the repository root with Python 3.10+:
